@@ -15,14 +15,15 @@ dout.write(("HELO\n").getBytes());
 dout.flush(); 
 //get OK about accessing server successfully
 Rep=in.readLine();
-if(Rep!="OK") System.out.println("ERROR:250 STMP");
+if(!Rep.equals("OK")) System.out.println("ERROR 250");
+else System.out.println("Server says: "+Rep);
 //send username
 String username = System.getProperty("user.name");
 dout.write(("AUTH "+username+"\n").getBytes());
 dout.flush(); 
 //get OK about AUTH from server
 Rep=in.readLine();
-if(Rep=="OK") System.out.println("Welcome "+username);
+if(Rep.equals("OK")) System.out.println("Welcome "+username);
 //send REDY
 dout.write(("REDY\n").getBytes());
 dout.flush();
@@ -30,9 +31,9 @@ Rep=in.readLine();
 System.out.println(Rep);
 
 String str="",str2="";  
-while(!str.equals("BYE")){  
+while(!str.equals("QUIT")){  
 str=br.readLine();  
-dout.write((str).getBytes());  
+dout.write((str+"\n").getBytes());  
 dout.flush();  
 str2=in.readLine();  
 System.out.println("Server says: "+str2);  

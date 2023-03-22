@@ -15,14 +15,14 @@ dout.write(("HELO\n").getBytes());
 dout.flush(); 
 //get OK about accessing server successfully
 Rep=in.readLine();
-System.out.println(Rep);
+if(Rep!="OK") System.out.println("ERROR:250 STMP");
 //send username
 String username = System.getProperty("user.name");
 dout.write(("AUTH "+username+"\n").getBytes());
 dout.flush(); 
 //get OK about AUTH from server
 Rep=in.readLine();
-System.out.println("Welcome "+username);
+if(Rep=="OK") System.out.println("Welcome "+username);
 //send REDY
 dout.write(("REDY\n").getBytes());
 dout.flush();

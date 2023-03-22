@@ -1,0 +1,18 @@
+baijinjia@MyUbuntu:~/Desktop/comp3100Project/workshop4$ ./ds-server -c ds-sample-config01.xml -v all -n -j 1
+# ds-sim server 28-Feb, 2023 @ MQ - client-server
+# Server-side simulator started with './ds-server -c ds-sample-config01.xml -v all -n -j 1'
+# Waiting for connection to port 50000 of IP address 127.0.0.1
+RCVD HELO
+SENT OK
+RCVD AUTH baijinjia
+# Welcome  baijinjia!
+# The system information can be read from 'ds-system.xml'
+SENT OK
+RCVD REDY
+SENT JOBN 37 0 653 3 700 3800
+
+baijinjia@MyUbuntu:~/Desktop/comp3100Project/workshop4$ java MyClient
+OK
+Welcome baijinjia
+JOBN 37 0 653 3 700 3800
+

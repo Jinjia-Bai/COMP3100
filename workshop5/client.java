@@ -9,29 +9,41 @@ BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
 BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 
 //Handshaking
-String Rep=""; 
+String str="",str2=""; 
 //send HELO
 dout.write(("HELO\n").getBytes());
 dout.flush(); 
 //get OK about accessing server successfully
-Rep=in.readLine();
-if(!Rep.equals("OK")) System.out.println("ERROR 250");
-else System.out.println("Server says: "+Rep);
+str2=in.readLine();
+if(!str2.equals("OK")) System.out.println("ERROR 250");
+else System.out.println("Server says: "+str2);
 //send username
 String username = System.getProperty("user.name");
 dout.write(("AUTH "+username+"\n").getBytes());
 dout.flush(); 
 //get OK about AUTH from server
-Rep=in.readLine();
-if(Rep.equals("OK")) System.out.println("Welcome "+username);
+str2=in.readLine();
+System.out.println("Welcome "+username);
 //send REDY
 dout.write(("REDY\n").getBytes());
 dout.flush();
-Rep=in.readLine();
-System.out.println(Rep);
+str2=in.readLine();
+System.out.println("Server says: "+str2);
 
-String str="",str2="";  
-while(!str.equals("QUIT")){  
+//schedule jobs 
+int job=0; 
+while(!str2.equals("OK")){
+dout.write(("SCHD "+job+" medium 0\n").getBytes());
+dout.flush();
+str2=in.readLine();
+System.out.println("Server says: "+str2);
+dout.write(("REDY\n").getBytes());
+dout.flush();
+str2=in.readLine();
+job++;
+}
+
+while(!str.equals("QUIT")){
 str=br.readLine();  
 dout.write((str+"\n").getBytes());  
 dout.flush();  

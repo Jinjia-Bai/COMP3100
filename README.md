@@ -1,2 +1,2 @@
 personal access token:
-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
+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

@@ -24,23 +24,26 @@ dout.flush();
 //get OK about AUTH from server
 str2=in.readLine();
 System.out.println("Welcome "+username);
+
+
+
+
+
+int jobID = 0;
+String str3="";
+while(!str3.equals("NONE")){
 //send REDY
 dout.write(("REDY\n").getBytes());
 dout.flush();
-str2=in.readLine();
-System.out.println("Server says: "+str2);
-
-//schedule jobs 
-int job=0; 
-while(!str2.equals("OK")){
-dout.write(("SCHD "+job+" medium 0\n").getBytes());
-dout.flush();
-str2=in.readLine();
-System.out.println("Server says: "+str2);
-dout.write(("REDY\n").getBytes());
-dout.flush();
-str2=in.readLine();
-job++;
+//receive message
+str3=in.readLine();
+System.out.println("Server says: "+str3);
+//schedule a job
+	if(str3.contains("JOBN")){
+		dout.write(("SCHD "+jobID+" medium 0\n").getBytes());
+		dout.flush();
+		jobID++;
+	}
 }
 
 while(!str.equals("QUIT")){

@@ -4,7 +4,7 @@ class MyClient{
 public static void main(String args[])throws Exception{  
 	Socket s=new Socket("localhost",50000);  //port  
 	DataOutputStream dout=new DataOutputStream(s.getOutputStream());  
-	BufferedReader br=new BufferedReader(new InputStreamReader(System.in));  
+	//BufferedReader br=new BufferedReader(new InputStreamReader(System.in));  
 	BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 
 	//Handshaking
@@ -14,15 +14,15 @@ public static void main(String args[])throws Exception{
 	dout.flush(); 
 	//receive OK
 	str=in.readLine();
-	if(!str.equals("OK")) System.out.println("ERROR 250");
-	else System.out.println("Server says: "+str);
+	//if(!str.equals("OK")) System.out.println("ERROR 250");
+	//else System.out.println("Server says: "+str);
 	//send AUTH
 	String username = System.getProperty("user.name");
 	dout.write(("AUTH "+username+"\n").getBytes());
 	dout.flush(); 
 	//receive OK
 	str=in.readLine();
-	System.out.println("Welcome "+username);
+	//System.out.println("Welcome "+username);
 
 	//job 1-n
 	boolean isGETS = true;
@@ -35,14 +35,14 @@ public static void main(String args[])throws Exception{
 		dout.flush();
 		//receive JOBN,JCPL or NONE
 		str2=in.readLine();
-		System.out.println("Server says: "+str2);
+		//System.out.println("Server says: "+str2);
 		if(isGETS){//do it only once in the while loop
 			//send GETS All
 			dout.write(("GETS All\n").getBytes());
 			dout.flush();
 			//Receive DATA nRecs recSize
 			str=in.readLine();
-			System.out.println("Server says: "+str);
+			//System.out.println("Server says: "+str);
 			Array = str.split(" ");
 			nRecs = Integer.parseInt(Array[1]);
 			//Send OK
@@ -52,7 +52,7 @@ public static void main(String args[])throws Exception{
 			for(int i=0;i<nRecs;i++){
 				String[] Array2=null;
 				str=in.readLine();
-				System.out.println("Server says: "+str);
+				//System.out.println("Server says: "+str);
 				Array2 = str.split(" ");
 				cores = Integer.parseInt(Array2[4]);
 				if(cores > Max){
@@ -67,7 +67,7 @@ public static void main(String args[])throws Exception{
 			dout.flush();
 			//receive .
 			str=in.readLine();
-			System.out.println("Server says: "+str);
+			//System.out.println("Server says: "+str);
 			isGETS = false;
 		}
 
@@ -78,7 +78,7 @@ public static void main(String args[])throws Exception{
 			jobID++;
 			//receive OK
 			str=in.readLine();
-			System.out.println("Server says: "+str);
+			//System.out.println("Server says: "+str);
 		}
 		else str = str2;
 	}

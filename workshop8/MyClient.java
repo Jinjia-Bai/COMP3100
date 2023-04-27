@@ -25,58 +25,54 @@ public static void main(String args[])throws Exception{
 	//System.out.println("Welcome "+username);
 
 	//job 1-n
-	boolean isGETS = true, isFirst = true;
 	int jobID = 0, nRecs = 0, serverID = 0, core = 0, memory = 0, disk = 0;
 	String type="";
 	String[] Array = null;
 	while(!str.equals("NONE")){
+		boolean isFirst = true;
 		//send REDY
-		dout.write(("REDY\n").getBytes());
-		dout.flush();
-		//receive JOBN,JCPL or NONE
+		dout.write(("REDY\n").getBytes());		//receive JOBN,JCPL or NONE
 		str2=in.readLine();
 		//System.out.println("Server says: "+str2);
 		if(str2.contains("JOBN")){
-			if(isGETS){//do it only once in the while loop
-				Array = str2.split(" ");
-				core = Integer.parseInt(Array[4]);
-				memory = Integer.parseInt(Array[5]);
-				disk = Integer.parseInt(Array[6]);
-				//send GETS All
-				dout.write(("GETS Capable "+core+" "+memory+" "+disk+"\n").getBytes());
-				dout.flush();
-				//Receive DATA nRecs recSize
+			Array = str2.split(" ");
+			jobID = Integer.parseInt(Array[2]);
+			core = Integer.parseInt(Array[4]);
+			memory = Integer.parseInt(Array[5]);
+			disk = Integer.parseInt(Array[6]);
+			//send GETS All
+			dout.write(("GETS Capable "+core+" "+memory+" "+disk+"\n").getBytes());
+			dout.flush();
+			//Receive DATA nRecs recSize
+			str=in.readLine();
+			//System.out.println("Server says: "+str);
+			String[] Array3=null;
+			Array3 = str.split(" ");
+			nRecs = Integer.parseInt(Array3[1]);
+			//Send OK
+			dout.write(("OK\n").getBytes());
+			dout.flush();
+			//receive records and identify the First Capable server
+			for(int i=0;i<nRecs;i++){
+				String[] Array2=null;
 				str=in.readLine();
 				//System.out.println("Server says: "+str);
-				Array = str.split(" ");
-				nRecs = Integer.parseInt(Array[1]);
-				//Send OK
-				dout.write(("OK\n").getBytes());
-				dout.flush();
-				//receive records and identify the First Capable server
-				for(int i=0;i<nRecs;i++){
-					String[] Array2=null;
-					str=in.readLine();
-					//System.out.println("Server says: "+str);
-					Array2 = str.split(" ");
-					if(isFirst){
-						type = Array2[0];
-						serverID = Integer.parseInt(Array2[1]);
-					}
-					isFirst = false;
+				Array2 = str.split(" ");
+				if(isFirst){
+					type = Array2[0];
+					serverID = Integer.parseInt(Array2[1]);
 				}
-				//Send OK
-				dout.write(("OK\n").getBytes());
-				dout.flush();
-				//receive .
-				str=in.readLine();
-				//System.out.println("Server says: "+str);
-				isGETS = false;
+				isFirst = false;
 			}
-		//schedule a job
+			//Send OK
+			dout.write(("OK\n").getBytes());
+			dout.flush();
+			//receive .
+			str=in.readLine();
+			//System.out.println("Server says: "+str);
+			//schedule a job
 			dout.write(("SCHD "+jobID+" "+type+" "+serverID+"\n").getBytes());
 			dout.flush();
-			jobID++;
 			//receive OK
 			str=in.readLine();
 			//System.out.println("Server says: "+str);

@@ -22,19 +22,18 @@ class MyClient{
 		dout.flush(); 
 		//receive OK
 		str = in.readLine();
-		//System.out.println("Welcome "+username);
 		
 		//job 1-n
-		int jobID = 0, max = 0, nRecs = 0, core = 0, memory = 0, disk = 0, serverID = 0, first_serverID = 0, wjobs = 0, rjobs = 0;
-		String type = "", first_type = "";
+		int jobID = 0, max = 0, nRecs = 0, core = 0, memory = 0, disk = 0,cores = 0, memorys = 0, disks = 0, serverID = 0, wjobs = 0, rjobs = 0;
+		String type = "";
 		String[] array = null;
 		while(!str.equals("NONE")){
-			boolean isFirst = true, isGet = false;
+			boolean isGet = false;
 			//send REDY
 			dout.write(("REDY\n").getBytes());
-			//receive JOBN,JCPL or NONE
+			//receive JOBN, JOBP, JCPL, CHKQ or NONE
 			str2 = in.readLine();
-			if(str2.contains("JOBN")){
+			if(str2.contains("JOBN") || str2.contains("JOBP")){
 				array = str2.split(" ");
 				jobID = Integer.parseInt(array[2]);
 				core = Integer.parseInt(array[4]);
@@ -49,40 +48,52 @@ class MyClient{
 				array3 = str.split(" ");
 				nRecs = Integer.parseInt(array3[1]);
 				sendOK(dout);
-				//receive records and identify the First Capable server
+				//receive records
 				for(int i = 0;i<nRecs;i++){
 					String[] array2=null;
 					str=in.readLine();
 					array2 = str.split(" ");
-					if(isFirst){
-						first_type = array2[0];
-						first_serverID = Integer.parseInt(array2[1]);
-						isFirst = false;
-					}
+					
+					cores = Integer.parseInt(array2[4]);
+					memorys = Integer.parseInt(array2[5]);
+					disks = Integer.parseInt(array2[6]);
+
 					wjobs = Integer.parseInt(array2[7]);
 					//rjobs = Integer.parseInt(array2[8]);
 					//not having rjobs and wjobs at the same time
-					if(wjobs == 0 && isGet == false){
+					if(wjobs == 0 && core <= cores && memory <= memorys && disk <= disks && isGet == false){
 						type = array2[0];
 						serverID = Integer.parseInt(array2[1]);
 						isGet = true;
 					}
 				}
-				//no s* found, select the first capable server
-				if(isGet == false){
-				type = first_type;
-				serverID = first_serverID;
-				}
 				sendOK(dout);
 				//receive .
 				str = in.readLine();
 				
+				//no s* found
+				if(isGet == false){
+					dout.write(("ENQJ GQ" + "\n").getBytes());
+					dout.flush();
+					//receive OK
+					str = in.readLine();
+					//System.out.println("ENQJ");
+				}
 				//schedule a job
+				else{
 				dout.write(("SCHD " + jobID + " " + type + " " + serverID + "\n").getBytes());
 				dout.flush();
 				//receive OK
 				str = in.readLine();
-			}	
+				}
+			}
+			else if(str2.contains("CHKQ")){
+				dout.write(("DEQJ GQ 0" + "\n").getBytes());
+				dout.flush();
+				//receive OK
+				str = in.readLine();
+				//System.out.println("CHKQ");
+			}
 			else str = str2;
 		}
 		

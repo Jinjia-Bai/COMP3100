@@ -24,16 +24,16 @@ class MyClient{
 		str = in.readLine();
 		
 		//job 1-n
-		int jobID = 0, max = 0, nRecs = 0, core = 0, memory = 0, disk = 0,cores = 0, memorys = 0, disks = 0, serverID = 0, wjobs = 0, rjobs = 0;
-		String type = "";
+		int jobID = 0, max = 0, nRecs = 0, core = 0, memory = 0, disk = 0,cores = 0, memorys = 0, disks = 0, serverID = 0, wjobs = 0, rjobs = 0, first_serverID = 0;
+		String type = "", first_type = "";
 		String[] array = null;
 		while(!str.equals("NONE")){
-			boolean isGet = false;
+			boolean isFirst = true, isGet = false;
 			//send REDY
 			dout.write(("REDY\n").getBytes());
 			//receive JOBN, JOBP, JCPL, CHKQ or NONE
 			str2 = in.readLine();
-			if(str2.contains("JOBN") || str2.contains("JOBP")){
+			if(str2.contains("JOBN")){
 				array = str2.split(" ");
 				jobID = Integer.parseInt(array[2]);
 				core = Integer.parseInt(array[4]);
@@ -53,7 +53,11 @@ class MyClient{
 					String[] array2=null;
 					str=in.readLine();
 					array2 = str.split(" ");
-					
+					if(isFirst){
+						first_type = array2[0];
+						first_serverID = Integer.parseInt(array2[1]);
+						isFirst = false;
+					}
 					cores = Integer.parseInt(array2[4]);
 					memorys = Integer.parseInt(array2[5]);
 					disks = Integer.parseInt(array2[6]);
@@ -73,26 +77,14 @@ class MyClient{
 				
 				//no s* found
 				if(isGet == false){
-					dout.write(("ENQJ GQ" + "\n").getBytes());
-					dout.flush();
-					//receive OK
-					str = in.readLine();
-					//System.out.println("ENQJ");
+					type = first_type;
+					serverID = first_serverID;
 				}
 				//schedule a job
-				else{
 				dout.write(("SCHD " + jobID + " " + type + " " + serverID + "\n").getBytes());
 				dout.flush();
 				//receive OK
 				str = in.readLine();
-				}
-			}
-			else if(str2.contains("CHKQ")){
-				dout.write(("DEQJ GQ 0" + "\n").getBytes());
-				dout.flush();
-				//receive OK
-				str = in.readLine();
-				//System.out.println("CHKQ");
 			}
 			else str = str2;
 		}

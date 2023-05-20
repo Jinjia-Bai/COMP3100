@@ -33,7 +33,7 @@ class MyClient{
 			dout.write(("REDY\n").getBytes());
 			//receive JOBN, JOBP, JCPL, CHKQ or NONE
 			str2 = in.readLine();
-			if(str2.contains("JOBN")){
+			if(str2.contains("JOBN") || str2.contains("JOBP")){
 				array = str2.split(" ");
 				jobID = Integer.parseInt(array[2]);
 				core = Integer.parseInt(array[4]);
@@ -53,11 +53,13 @@ class MyClient{
 					String[] array2=null;
 					str=in.readLine();
 					array2 = str.split(" ");
+
 					if(isFirst){
 						first_type = array2[0];
 						first_serverID = Integer.parseInt(array2[1]);
 						isFirst = false;
 					}
+
 					cores = Integer.parseInt(array2[4]);
 					memorys = Integer.parseInt(array2[5]);
 					disks = Integer.parseInt(array2[6]);

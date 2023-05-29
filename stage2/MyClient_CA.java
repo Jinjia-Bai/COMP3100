@@ -28,7 +28,7 @@ class MyClient_CA{
 		String type = "", first_type = "";
 		String[] array = null;
 		while(!str.equals("NONE")){
-			boolean isFirst = true, isGet = false;
+			boolean isFirst = true, isGet = false, isSufficient = false;
 			//send REDY
 			dout.write(("REDY\n").getBytes());
 			//receive JOBN, JCPL or NONE
@@ -62,9 +62,10 @@ class MyClient_CA{
 						first_serverID = Integer.parseInt(array2[1]);
 						isFirst = false;
 					}
-					if(isFirst == false && isGet == false && core <= cores && memory <= memorys && disk <= disks){
+					if(isSufficient == false && isFirst == false && isGet == false && core <= cores && memory <= memorys && disk <= disks){
 						first_type = array2[0];
 						first_serverID = Integer.parseInt(array2[1]);
+						isSufficient = true;
 					}
 					//not having rjobs and wjobs at the same time
 					if(wjobs == 0 && core <= cores && memory <= memorys && disk <= disks && isGet == false){

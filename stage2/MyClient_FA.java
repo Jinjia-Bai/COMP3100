@@ -1,6 +1,6 @@
 import java.net.*;  
 import java.io.*;  
-class MyClient{
+class MyClient_FA{
 	public static void main(String args[])throws Exception{  
 		Socket s = new Socket("localhost",50000);  //port  
 		DataOutputStream dout = new DataOutputStream(s.getOutputStream());  

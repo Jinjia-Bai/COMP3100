@@ -1,6 +1,6 @@
 import java.net.*;  
 import java.io.*;  
-class MyClient{
+class MyClient_CA{
 	public static void main(String args[])throws Exception{  
 		Socket s = new Socket("localhost",50000);  //port  
 		DataOutputStream dout = new DataOutputStream(s.getOutputStream());  
@@ -53,15 +53,19 @@ class MyClient{
 					String[] array2 = null;
 					str = in.readLine();
 					array2 = str.split(" ");
+					cores = Integer.parseInt(array2[4]);
+					memorys = Integer.parseInt(array2[5]);
+					disks = Integer.parseInt(array2[6]);
+					wjobs = Integer.parseInt(array2[7]);
 					if(isFirst){
 						first_type = array2[0];
 						first_serverID = Integer.parseInt(array2[1]);
 						isFirst = false;
 					}
-					cores = Integer.parseInt(array2[4]);
-					memorys = Integer.parseInt(array2[5]);
-					disks = Integer.parseInt(array2[6]);
-					wjobs = Integer.parseInt(array2[7]);
+					if(isFirst == false && isGet == false && core <= cores && memory <= memorys && disk <= disks){
+						first_type = array2[0];
+						first_serverID = Integer.parseInt(array2[1]);
+					}
 					//not having rjobs and wjobs at the same time
 					if(wjobs == 0 && core <= cores && memory <= memorys && disk <= disks && isGet == false){
 						type = array2[0];

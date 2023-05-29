@@ -1,6 +1,6 @@
 import java.net.*;  
 import java.io.*;  
-class test{
+class MyClient_FAQ{
 	public static void main(String args[])throws Exception{  
 		Socket s = new Socket("localhost",50000);  //port  
 		DataOutputStream dout = new DataOutputStream(s.getOutputStream());  
@@ -51,7 +51,7 @@ class test{
 				//receive records
 				for(int i = 0;i<nRecs;i++){
 					String[] array2=null;
-					str=in.readLine();
+					str = in.readLine();
 					array2 = str.split(" ");
 					cores = Integer.parseInt(array2[4]);
 					memorys = Integer.parseInt(array2[5]);
